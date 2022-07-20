@@ -1,0 +1,85 @@
+
+java题目：已知有个升序的数组，要求插入一个元素，该数组顺序依然是升序，比如：[10, 12, 45, 90], 添加23 后，数组为[10, 12, 23, 45,90]
+（此题目来源于bilibili的韩顺平老师，个人认为这道题目韩老师的思路很有意思，所以打算好好分析一下）
+
+常规方法：数组扩容+升序排序
+数组扩容，就是创建新数组，把旧数组上的值都给新数组，并在新数组上添加新的元素，最后是新数组的地址值覆盖旧数组的地址值
+升序排序，就是用冒泡排序法或sort()方法来实现数组中的数字从小到大排列
+
+下面是代码：
+
+        int[] a={10,12,45,90};
+        Scanner sc=new Scanner(System.in);
+        System.out.println("请输入一个想插入的数字:");
+        int num= sc.nextInt();
+        int[] b=new int[a.length+1];
+        for (int i=0;i<a.length;i++){
+            b[i]=a[i];
+        }
+        //把num插入到b数组的最后一个
+        for (int i=0;i<b.length;i++){
+            if (i==b.length-1) {
+                b[i] = num;
+            }
+        }
+        //冒泡排序，把数字挨个对比
+        for (int i=0;i<b.length-1;i++){
+            for (int j=0;j<b.length-1;j++){
+                int p;
+                if (b[j]>b[j+1]){
+                    p=b[j];
+                    b[j]=b[j+1];
+                    b[j+1]=p;
+                }
+            }
+        }
+       //新数组的地址值覆盖旧数组的地址值
+        a=b;
+       //输出
+        for (int i=0;i<a.length;i++){
+            System.out.print(a[i]+"\t");
+        }
+
+新颖方法：数组扩容+要插入的数字定位+循环判断
+数字定位，就是先找出数字在数组中的位置，用一个变量来保存
+循环判断，就是根据i是否等于index(数字定位下标)来判断，并挨个进行赋值操作
+新颖的点，j的运用
+
+下面是代码：
+
+        int[] arr={10,12,45,90};
+        Scanner sc=new Scanner(System.in);
+        System.out.println("请输入一个想插入的数字:");
+        int insertNum=sc.nextInt();
+        int index=-1;
+        //定位
+        for (int i=0;i<arr.length;i++){
+            if (insertNum<=arr[i]){
+                index=i;
+                break;
+            }
+        }
+        //因为在上面的循环中，arr.length是没有判断过的
+        if (index==-1){
+            index = arr.length;
+        }
+        int[] arrnew=new int[arr.length+1];
+        //判断i是否等于index,如果不等于，那么就是赋值的操作，等于的话，插入数字即可
+        for (int i=0,j=0;i<arrnew.length;i++){
+            if (i != index){
+                //假设i==0,此时j==0,10就是数组的第一个数字，以此类推。
+                //j++的意思就是前面的已经赋值过了，那么就是下一个数字了
+                arrnew[i] = arr[j];
+                j++;
+            }else {
+                //如果 i== index ,那么下面式子就成立
+                arrnew[i] = insertNum;
+            }
+        }
+        arr=arrnew;
+        for (int i=0;i<arr.length;i++){
+            System.out.print(arr[i]+"\t");
+        }
+
+
+
